@@ -147,8 +147,12 @@ class RenderOverlayTutorialHole extends RenderProxyBox {
     if (child == null || !child!.hasSize || child!.size == Size.infinite) {
       return Rect.zero;
     }
-    if (child!.localToGlobal(Offset.zero) == Offset.infinite) return Rect.zero;
-    return child!.localToGlobal(Offset.zero) & child!.size;
+    final navigatorContext = Navigator.of(context).context;
+    final navigatorRenderBox = navigatorContext.findRenderObject();
+    final offset =
+        child!.localToGlobal(Offset.zero, ancestor: navigatorRenderBox);
+    if (offset == Offset.infinite) return Rect.zero;
+    return offset & child!.size;
   }
 
   @override
